@@ -1,0 +1,34 @@
+import { Hero } from "./components/Hero";
+import { Features } from "./components/Features";
+import { Statistics } from "./components/Statistics";
+import { Catalog } from "./components/Catalog";
+import { Pricing } from "./components/Pricing";
+import { Testimonials } from "./components/Testimonials";
+import { Footer } from "./components/Footer";
+import { PrivacyPolicy } from "./components/PrivacyPolicy";
+import { TermsOfService } from "./components/TermsOfService";
+import { useState } from "react";
+
+export default function App() {
+  const [currentPage, setCurrentPage] = useState<'home' | 'privacy' | 'terms'>('home');
+
+  if (currentPage === 'privacy') {
+    return <PrivacyPolicy onBack={() => setCurrentPage('home')} />;
+  }
+
+  if (currentPage === 'terms') {
+    return <TermsOfService onBack={() => setCurrentPage('home')} />;
+  }
+
+  return (
+    <div className="min-h-screen bg-background font-sans selection:bg-primary selection:text-primary-foreground">
+      <Hero />
+      <Statistics />
+      <Features />
+      <Catalog />
+      <Testimonials />
+      <Pricing />
+      <Footer onNavigate={setCurrentPage} />
+    </div>
+  );
+}
