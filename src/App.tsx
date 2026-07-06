@@ -1,3 +1,4 @@
+import { Routes, Route } from "react-router-dom";
 import { Hero } from "./components/Hero";
 import { Features } from "./components/Features";
 import { Statistics } from "./components/Statistics";
@@ -8,8 +9,9 @@ import { Footer } from "./components/Footer";
 import { PrivacyPolicy } from "./components/PrivacyPolicy";
 import { TermsOfService } from "./components/TermsOfService";
 import { useState } from "react";
+import AdminApp from "./admin/AdminApp";
 
-export default function App() {
+function Landing() {
   const [currentPage, setCurrentPage] = useState<'home' | 'privacy' | 'terms'>('home');
 
   if (currentPage === 'privacy') {
@@ -30,5 +32,14 @@ export default function App() {
       <Pricing />
       <Footer onNavigate={setCurrentPage} />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/admin/*" element={<AdminApp />} />
+      <Route path="/*" element={<Landing />} />
+    </Routes>
   );
 }
