@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(VERCEL_TELEMETRY_DISABLED=1 vercel deploy --yes)"
+    ]
+  }
+}
