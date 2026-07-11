@@ -1,6 +1,7 @@
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { Check, ArrowRight } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
+import { useSiteContent } from "../lib/siteContent";
 import imgImage2 from "figma:asset/629332bcc754948a8d2ccd2001257db6bbbad5b7.png";
 import imgImage3 from "figma:asset/b40017218bb8a3d271e26850ab873d8509abe267.png";
 import imgImage4 from "figma:asset/73c5e1a9a73aaee34212259fc3bc258407c5e479.png";
@@ -24,6 +25,7 @@ import imgImage21 from "figma:asset/8ae8d404075da30d5a30f4fbe037570afaeb1b3e.png
 import imgImage22 from "figma:asset/a1ee7560f07ba2dad56a20c644cb518c1f3fb707.png";
 
 export function Features() {
+  const contacts = useSiteContent("contacts");
   const presentationSlides = [
     imgImage2, imgImage3, imgImage4, imgImage5, imgImage6, imgImage7,
     imgImage8, imgImage9, imgImage10, imgImage11, imgImage12, imgImage13,
@@ -68,7 +70,7 @@ export function Features() {
               ))}
             </div>
 
-            <a href="https://t.me/+pPdxjKbjeaMzMzIy" className="inline-flex items-center font-bold text-primary hover:text-primary/80 transition-colors">
+            <a href={contacts.bot_link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center font-bold text-primary hover:text-primary/80 transition-colors">
               Спробувати безкоштовно <ArrowRight className="ml-2 w-5 h-5" />
             </a>
           </div>

@@ -10,6 +10,7 @@ import { PrivacyPolicy } from "./components/PrivacyPolicy";
 import { TermsOfService } from "./components/TermsOfService";
 import { useState } from "react";
 import AdminApp from "./admin/AdminApp";
+import { SEOHead } from "./components/SEOHead";
 
 function Landing() {
   const [currentPage, setCurrentPage] = useState<'home' | 'privacy' | 'terms'>('home');
@@ -24,6 +25,7 @@ function Landing() {
 
   return (
     <div className="min-h-screen bg-background font-sans selection:bg-primary selection:text-primary-foreground">
+      <SEOHead />
       <Hero />
       <Statistics />
       <Features />

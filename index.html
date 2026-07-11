@@ -1,15 +1,95 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Детский сайт для рекламы бота (1)</title>
-    </head>
+    <!-- Primary SEO -->
+    <title>Happy English — готові презентації та ігри для уроків англійської</title>
+    <meta
+      name="description"
+      content="Готові інтерактивні презентації, ігри та завдання в Telegram для вчителів англійської. Економте час на підготовку та захопіть учнів. 240+ уроків, рівні A0–A2."
+    />
+    <meta
+      name="keywords"
+      content="англійська для дітей, презентації для уроків англійської, ігри англійська, Wordwall, Canva, матеріали для вчителів, Telegram уроки"
+    />
+    <meta name="author" content="Happy English" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#EC4899" />
+    <link rel="canonical" href="/" />
 
-    <body>
-      <div id="root"></div>
-      <script type="module" src="/src/main.tsx"></script>
-    </body>
-  </html>
-  
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Happy English" />
+    <meta property="og:locale" content="uk_UA" />
+    <meta property="og:title" content="Happy English — готові матеріали для уроків англійської" />
+    <meta
+      property="og:description"
+      content="Інтерактивні презентації, ігри та завдання в Telegram для вчителів англійської. 240+ уроків, рівні A0–A2."
+    />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:url" content="/" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Happy English — готові матеріали для уроків англійської" />
+    <meta
+      name="twitter:description"
+      content="Інтерактивні презентації, ігри та завдання в Telegram для вчителів англійської."
+    />
+    <meta name="twitter:image" content="/og-image.png" />
+
+    <!-- Structured data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "EducationalOrganization",
+        "name": "Happy English",
+        "description": "Готові презентації, ігри та завдання для уроків англійської мови для дітей.",
+        "sameAs": [
+          "https://www.instagram.com/happyenglish2022",
+          "https://t.me/+380954970102"
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Happy English",
+        "inLanguage": "uk"
+      }
+    </script>
+
+    <!-- Make canonical / OG URLs absolute for the current domain -->
+    <script>
+      (function () {
+        var origin = location.origin,
+          href = location.href.split("#")[0];
+        function set(sel, attr, val) {
+          var e = document.querySelector(sel);
+          if (e) e.setAttribute(attr, val);
+        }
+        set('link[rel="canonical"]', "href", href);
+        set('meta[property="og:url"]', "content", href);
+        ['meta[property="og:image"]', 'meta[name="twitter:image"]'].forEach(function (s) {
+          var e = document.querySelector(s);
+          if (e) {
+            var c = e.getAttribute("content");
+            if (c && c.charAt(0) === "/") e.setAttribute("content", origin + c);
+          }
+        });
+      })();
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

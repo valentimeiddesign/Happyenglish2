@@ -2,8 +2,11 @@ import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { Sparkles, BookOpen, Star, ArrowRight } from "lucide-react";
 import { Button } from "./ui/button";
 import heroImage from "figma:asset/266ffbc1717072c96976d9c00af435b6a6786808.png";
+import { useSiteContent } from "../lib/siteContent";
 
 export function Hero() {
+  const hero = useSiteContent("hero");
+  const contacts = useSiteContent("contacts");
   return (
     <section className="relative overflow-hidden bg-secondary pt-20 pb-24 lg:pt-32 lg:pb-40">
       {/* Decorative Background Elements */}
@@ -24,25 +27,31 @@ export function Hero() {
           <div className="flex flex-col items-start text-left z-10">
             <div className="inline-flex items-center gap-2 mb-8 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
               <span className="flex h-2 w-2 rounded-full bg-green-400 animate-pulse"></span>
-              <span className="text-secondary-foreground text-sm font-medium tracking-wide">Для вчителів англійської</span>
+              <span className="text-secondary-foreground text-sm font-medium tracking-wide">{hero.badge}</span>
             </div>
-            
+
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] tracking-tight mb-6">
-              Зробіть ваші уроки <span className="text-primary bg-white px-2 rounded-[var(--radius-button)] box-decoration-clone">незабутніми</span> для дітей!
+              {hero.title_prefix} <span className="text-primary bg-white px-2 rounded-[var(--radius-button)] box-decoration-clone">{hero.title_highlight}</span> {hero.title_suffix}
             </h1>
-            
+
             <p className="text-lg sm:text-xl text-white/90 mb-8 max-w-lg leading-relaxed">
-              Готові інтерактивні презентації, ігри та завдання в Telegram. Економте час на підготовку та дивуйте своїх учнів щодня! 🚀
+              {hero.subtitle}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-
-              <Button 
-                size="lg" 
-                variant="outline" 
+              <Button
+                size="lg"
+                variant="outline"
                 className="bg-transparent border-2 border-white/30 text-white hover:bg-white/10 h-14 px-8 text-lg backdrop-blur-sm"
+                asChild={!!(hero.cta_link || contacts.bot_link)}
               >
-                Детальніше
+                {(hero.cta_link || contacts.bot_link) ? (
+                  <a href={hero.cta_link || contacts.bot_link} target="_blank" rel="noopener noreferrer">
+                    {hero.cta_text}
+                  </a>
+                ) : (
+                  <span>{hero.cta_text}</span>
+                )}
               </Button>
             </div>
             
@@ -54,7 +63,7 @@ export function Hero() {
                   </div>
                 ))}
               </div>
-              <p>Вже 100+ вчителів з нами</p>
+              <p>{hero.social_proof}</p>
             </div>
           </div>
 
@@ -78,7 +87,7 @@ export function Hero() {
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 font-semibold">Рейтинг</p>
-                    <p className="text-lg font-bold text-gray-900">5.0/5</p>
+                    <p className="text-lg font-bold text-gray-900">{hero.rating}</p>
                   </div>
                 </div>
               </div>
@@ -91,7 +100,7 @@ export function Hero() {
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 font-semibold">Матеріали</p>
-                    <p className="text-lg font-bold text-gray-900">240+ уроків</p>
+                    <p className="text-lg font-bold text-gray-900">{hero.materials}</p>
                   </div>
                 </div>
               </div>

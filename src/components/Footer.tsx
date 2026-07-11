@@ -1,11 +1,13 @@
 import { MessageCircle, Mail, Send, Instagram, Heart } from "lucide-react";
 import { Button } from "./ui/button";
+import { useSiteContent } from "../lib/siteContent";
 
 interface FooterProps {
   onNavigate?: (page: 'privacy' | 'terms') => void;
 }
 
 export function Footer({ onNavigate }: FooterProps) {
+  const contacts = useSiteContent("contacts");
   return (
     <footer className="bg-gray-900 text-white pt-20 pb-10">
       <div className="container mx-auto px-4 max-w-6xl">
@@ -18,12 +20,12 @@ export function Footer({ onNavigate }: FooterProps) {
               <span className="text-2xl font-bold">Happy<span className="text-primary">English</span></span>
             </div>
             <p className="text-gray-400 leading-relaxed mb-8 max-w-sm">
-              Сучасні інструменти для вчителів, які прагнуть зробити навчання цікавим та ефективним. Ми допомагаємо економити час та надихати учнів.
+              {contacts.about}
             </p>
             <div className="flex gap-4">
-              <SocialLink href="https://www.instagram.com/happyenglish2022?igsh=c3d5amc2bjMzZTBk" icon={<Instagram className="w-5 h-5" />} label="Instagram" />
-              <SocialLink href="https://t.me/+380954970102" icon={<Send className="w-5 h-5" />} label="Telegram" />
-              <SocialLink href="mailto:contact@example.com" icon={<Mail className="w-5 h-5" />} label="Email" />
+              {contacts.instagram && <SocialLink href={contacts.instagram} icon={<Instagram className="w-5 h-5" />} label="Instagram" />}
+              {contacts.telegram && <SocialLink href={contacts.telegram} icon={<Send className="w-5 h-5" />} label="Telegram" />}
+              {contacts.email && <SocialLink href={`mailto:${contacts.email}`} icon={<Mail className="w-5 h-5" />} label="Email" />}
             </div>
           </div>
 
@@ -62,7 +64,7 @@ export function Footer({ onNavigate }: FooterProps) {
                 Отримайте доступ до 240+ уроків прямо зараз через наш зручний Telegram бот.
               </p>
               <Button className="w-full bg-primary text-white hover:bg-primary/90 font-bold h-12 rounded-xl" asChild>
-                <a href="https://t.me/+pPdxjKbjeaMzMzIy" target="_blank" rel="noopener noreferrer">
+                <a href={contacts.bot_link} target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="w-5 h-5 mr-2" />
                   Запустити Бот
                 </a>
@@ -73,7 +75,7 @@ export function Footer({ onNavigate }: FooterProps) {
 
         {/* Copyright */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
-          <p>© 2025 English Lessons. Всі права захищені.</p>
+          <p>{contacts.copyright}</p>
           <div className="flex items-center gap-1">
             <span>Зроблено з</span>
             <Heart className="w-4 h-4 text-red-500 fill-red-500 animate-pulse" />

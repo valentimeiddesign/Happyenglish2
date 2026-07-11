@@ -1,17 +1,42 @@
+import { useEffect, useState } from "react";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
 import { Check, Sparkles, Zap } from "lucide-react";
-import { Badge } from "./ui/badge";
+import { supabase } from "../admin/lib/supabase";
+
+type Plan = { title: string; subtitle: string | null; price: number; payment_link: string | null };
+
+const DEFAULT_MONTHLY: Plan = { title: "Місячна підписка", subtitle: "Спробуйте всі переваги", price: 300, payment_link: "https://www.privat24.ua/rd/send_qr/liqpay_static_qr/qr_15823fec544b47419d97209a529c56d6" };
+const DEFAULT_QUARTER: Plan = { title: "3 Місяці", subtitle: "Максимальна вигода -35%", price: 585, payment_link: "https://www.privat24.ua/rd/send_qr/liqpay_static_qr/qr_6f9f0d914662488f928f3bd3952ed11e" };
 
 export function Pricing() {
-  const monthlyPrice = 300;
-  const threeMonthsPrice = Math.round(monthlyPrice * 3 * 0.65); // 35% discount
+  const [monthly, setMonthly] = useState<Plan>(DEFAULT_MONTHLY);
+  const [quarter, setQuarter] = useState<Plan>(DEFAULT_QUARTER);
+
+  useEffect(() => {
+    supabase
+      .from("products")
+      .select("title,subtitle,price,payment_link,billing_period")
+      .eq("type", "subscription")
+      .eq("is_active", true)
+      .order("sort_order")
+      .then(({ data, error }) => {
+        if (error || !data) return;
+        const m = data.find((p: any) => p.billing_period === "monthly");
+        const q = data.find((p: any) => p.billing_period !== "monthly");
+        if (m) setMonthly(m as Plan);
+        if (q) setQuarter(q as Plan);
+      });
+  }, []);
+
+  const monthlyPrice = monthly.price;
+  const threeMonthsPrice = quarter.price;
+  const savings = monthlyPrice * 3 - threeMonthsPrice;
 
   return (
     <section className="py-24 bg-white relative overflow-hidden">
-      {/* Decorative background */}
       <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
-      
+
       <div className="container mx-auto px-4 max-w-5xl">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-6">Інвестуйте в <span className="text-secondary">якісний контент</span></h2>
@@ -24,17 +49,17 @@ export function Pricing() {
           {/* Standard Plan */}
           <Card className="p-8 rounded-3xl border-2 border-gray-100 shadow-xl bg-white hover:border-gray-200 transition-colors relative z-0">
              <div className="mb-8">
-               <h3 className="text-xl font-bold text-gray-900 mb-2">Місячна підписка</h3>
-               <p className="text-gray-500 text-sm">Спробуйте всі переваги</p>
+               <h3 className="text-xl font-bold text-gray-900 mb-2">{monthly.title}</h3>
+               <p className="text-gray-500 text-sm">{monthly.subtitle ?? "Спробуйте всі переваги"}</p>
              </div>
-             
+
              <div className="mb-8 flex items-baseline">
                <span className="text-5xl font-bold text-gray-900">{monthlyPrice}₴</span>
                <span className="text-gray-400 ml-2">/міс</span>
              </div>
 
              <Button className="w-full mb-8 bg-gray-900 text-white hover:bg-gray-800 h-12 rounded-xl font-bold shadow-lg" asChild>
-                <a href="https://www.privat24.ua/rd/send_qr/liqpay_static_qr/qr_15823fec544b47419d97209a529c56d6" target="_blank">Обрати тариф</a>
+                <a href={monthly.payment_link ?? "#"} target="_blank" rel="noopener noreferrer">Обрати тариф</a>
              </Button>
 
              <div className="space-y-4">
@@ -57,25 +82,25 @@ export function Pricing() {
              </div>
 
              <div className="mb-8">
-               <h3 className="text-xl font-bold text-gray-900 mb-2">3 Місяці</h3>
-               <p className="text-primary font-medium text-sm">Максимальна вигода -35%</p>
+               <h3 className="text-xl font-bold text-gray-900 mb-2">{quarter.title}</h3>
+               <p className="text-primary font-medium text-sm">{quarter.subtitle ?? "Максимальна вигода -35%"}</p>
              </div>
-             
+
              <div className="mb-8 flex items-baseline">
                <span className="text-6xl font-bold text-primary">{threeMonthsPrice}₴</span>
                <span className="text-gray-400 ml-2">/3 міс</span>
              </div>
 
              <Button className="w-full mb-8 bg-primary text-white hover:bg-primary/90 h-14 rounded-xl font-bold text-lg shadow-primary/30 shadow-xl" asChild>
-                <a href="https://www.privat24.ua/rd/send_qr/liqpay_static_qr/qr_6f9f0d914662488f928f3bd3952ed11e" target="_blank">Заощадити зараз</a>
+                <a href={quarter.payment_link ?? "#"} target="_blank" rel="noopener noreferrer">Заощадити зараз</a>
              </Button>
 
              <div className="space-y-4">
                <p className="text-sm font-bold text-gray-900 uppercase tracking-wider">Все з місячного, плюс:</p>
                <ul className="space-y-3">
                  {[
-                   `Економія ${monthlyPrice * 3 - threeMonthsPrice}₴`, 
-                   "Пріоритетна підтримка", 
+                   `Економія ${savings}₴`,
+                   "Пріоритетна підтримка",
                    "Гарантія фіксації ціни",
                    "Бонусні ігри"
                  ].map((feature, i) => (
@@ -90,7 +115,7 @@ export function Pricing() {
              </div>
           </Card>
         </div>
-        
+
         <div className="mt-16 flex flex-col md:flex-row justify-center gap-8 text-center md:text-left">
            <div className="flex items-center gap-4 justify-center md:justify-start">
               <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center">
