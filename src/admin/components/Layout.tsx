@@ -11,6 +11,7 @@ import {
   GraduationCap,
   LogOut,
   ExternalLink,
+  MessageSquareQuote,
 } from "lucide-react";
 
 const NAV = [
@@ -18,6 +19,7 @@ const NAV = [
   { to: "/admin/products", icon: BookOpen, label: "Курси" },
   { to: "/admin/customers", icon: Users, label: "Покупці" },
   { to: "/admin/purchases", icon: CreditCard, label: "Продажі" },
+  { to: "/admin/reviews", icon: MessageSquareQuote, label: "Відгуки" },
   { to: "/admin/sync", icon: RefreshCw, label: "Синхронізація" },
   { to: "/admin/settings", icon: Settings, label: "Налаштування" },
 ];

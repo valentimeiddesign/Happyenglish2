@@ -80,6 +80,23 @@ export interface EventRow {
   created_at: string;
 }
 
+export type TestimonialType = "image" | "text";
+
+export interface Testimonial {
+  id: string;
+  type: TestimonialType;
+  author_name: string | null;
+  author_role: string | null;
+  avatar_url: string | null;
+  image_url: string | null;
+  rating: number | null;
+  text: string | null;
+  is_published: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export const STATUS_LABELS: Record<PurchaseStatus, string> = {
   pending: "Очікує оплати",
   paid: "Оплачено",

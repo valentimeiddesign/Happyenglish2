@@ -18,7 +18,9 @@
 
 - **Адмінка:** `https://<ваш-домен>/admin` (локально `http://localhost:3000/admin`)
 - **Логін:** `valentimeid@gmail.com`
-- **Пароль:** `HappyEnglish2026!` → **обов'язково змініть** у розділі «Налаштування».
+- **Пароль:** передається окремо (не зберігається в репозиторії) → змініть у «Налаштуваннях» після першого входу.
+
+> 🔒 Ніколи не тримайте паролі/секрети у цьому файлі — репозиторій публічний.
 
 ## Реквізити проєкту Supabase
 
@@ -39,7 +41,7 @@ Supabase Dashboard → проєкт **Happy English** → **Edge Functions → S
 | `TELEGRAM_WEBHOOK_SECRET` | Будь-який випадковий рядок (напр. `he_wh_9f3a...`) — захищає webhook |
 | `LIQPAY_PUBLIC_KEY` | Public key з кабінету LiqPay |
 | `LIQPAY_PRIVATE_KEY` | Private key з кабінету LiqPay |
-| `CRON_SECRET` | `ab625e6a2dc380ee4b371052393a1a1f` (вже вшитий у планувальник) |
+| `CRON_SECRET` | значення планувальника — візьміть у Supabase → Settings → Cron (передається окремо) |
 
 `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` додаються Supabase автоматично.
 
