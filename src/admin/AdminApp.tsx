@@ -6,6 +6,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { Products } from "./pages/Products";
 import { Customers } from "./pages/Customers";
 import { Purchases } from "./pages/Purchases";
+import { Reviews } from "./pages/Reviews";
 import { Sync } from "./pages/Sync";
 import { Settings } from "./pages/Settings";
 import { Spinner } from "./components/bits";
@@ -41,6 +42,7 @@ function AdminRoutes() {
         <Route path="products" element={<Products />} />
         <Route path="customers" element={<Customers />} />
         <Route path="purchases" element={<Purchases />} />
+        <Route path="reviews" element={<Reviews />} />
         <Route path="sync" element={<Sync />} />
         <Route path="settings" element={<Settings />} />
       </Route>
