@@ -4,34 +4,23 @@ import imgCanva from "figma:asset/b526d5d3648fbc7bea8cb5ce15a93bdbeaee7551.png";
 import imgGenially from "figma:asset/8dce48570a01e444f0c3c1b309197e54f00ef7e2.png";
 import imgWordwall from "figma:asset/f7ed3a69f6985c7c2274a4ec7dab8ae30d6d440f.png";
 import imgBaamboozle from "figma:asset/34f5dcef6cf8259d4a3fc29018f60ce82fbeb0cf.png";
+import { useSiteContent } from "../lib/siteContent";
 
 export function Statistics() {
-  const stats = [
-    {
-      icon: BookOpen,
-      number: "240+",
-      label: "Інтерактивних уроків",
-      color: "bg-blue-100 text-blue-600",
-    },
-    {
-      icon: Star,
-      number: "4.9/5",
-      label: "Середній рейтинг",
-      color: "bg-green-100 text-green-600",
-    },
-    {
-      icon: Monitor,
-      number: "4",
-      label: "Платформи навчання",
-      color: "bg-purple-100 text-purple-600",
-    },
-    {
-      icon: Trophy,
-      number: "15+",
-      label: "Типів ігор",
-      color: "bg-orange-100 text-orange-600",
-    },
+  const statsContent = useSiteContent("stats");
+  const icons = [BookOpen, Star, Monitor, Trophy];
+  const colors = [
+    "bg-blue-100 text-blue-600",
+    "bg-green-100 text-green-600",
+    "bg-purple-100 text-purple-600",
+    "bg-orange-100 text-orange-600",
   ];
+  const stats = (statsContent.items ?? []).map((it, i) => ({
+    icon: icons[i % icons.length],
+    number: it.number,
+    label: it.label,
+    color: colors[i % colors.length],
+  }));
 
   const platforms = [
     { name: "Canva", img: imgCanva, color: "border-blue-200 bg-blue-50" },

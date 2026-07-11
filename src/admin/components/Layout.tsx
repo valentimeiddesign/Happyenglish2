@@ -12,6 +12,7 @@ import {
   LogOut,
   ExternalLink,
   MessageSquareQuote,
+  FileText,
 } from "lucide-react";
 
 const NAV = [
@@ -20,6 +21,7 @@ const NAV = [
   { to: "/admin/customers", icon: Users, label: "Покупці" },
   { to: "/admin/purchases", icon: CreditCard, label: "Продажі" },
   { to: "/admin/reviews", icon: MessageSquareQuote, label: "Відгуки" },
+  { to: "/admin/content", icon: FileText, label: "Контент сайту" },
   { to: "/admin/sync", icon: RefreshCw, label: "Синхронізація" },
   { to: "/admin/settings", icon: Settings, label: "Налаштування" },
 ];
