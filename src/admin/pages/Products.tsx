@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase, adminAction } from "../lib/supabase";
+import { uploadImage } from "../lib/storage";
 import { Product } from "../lib/types";
 import { money } from "../lib/format";
 import { PageHeader, Card, Spinner, EmptyState } from "../components/bits";
@@ -16,7 +17,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, Send, CheckCircle2, XCircle, Loader2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Send, CheckCircle2, XCircle, Loader2, Upload, ImageIcon } from "lucide-react";
 
 const empty: Partial<Product> = {
   slug: "",
@@ -72,7 +73,15 @@ export function Products() {
           {products.map((p) => (
             <Card key={p.id} className="p-5 flex flex-col">
               <div className="flex items-start justify-between mb-2">
-                <div className="text-2xl">{p.emoji ?? "📚"}</div>
+                {p.image_url && /^https?:\/\//.test(p.image_url) ? (
+                  <img
+                    src={p.image_url}
+                    alt=""
+                    className="w-10 h-10 rounded-lg object-contain bg-muted"
+                  />
+                ) : (
+                  <div className="text-2xl">{p.emoji ?? "📚"}</div>
+                )}
                 <div className="flex items-center gap-2">
                   {p.is_active ? (
                     <span className="text-[11px] font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
@@ -142,11 +151,31 @@ function ProductDialog({
   const [form, setForm] = useState<Partial<Product>>(product);
   const [saving, setSaving] = useState(false);
   const [testing, setTesting] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [testResult, setTestResult] = useState<null | { ok: boolean; text: string }>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   const isNew = !product.id;
 
   function set<K extends keyof Product>(key: K, value: Product[K]) {
     setForm((f) => ({ ...f, [key]: value }));
+  }
+
+  // Only uploaded (http) images render on the site; bundled defaults are used otherwise.
+  const cover = form.image_url && /^https?:\/\//.test(form.image_url) ? form.image_url : null;
+
+  async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const url = await uploadImage(file, "products");
+      set("image_url", url);
+      toast.success("Зображення завантажено");
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+    setUploading(false);
+    if (fileRef.current) fileRef.current.value = "";
   }
 
   async function save() {
@@ -165,6 +194,7 @@ function ProductDialog({
       level: form.level || null,
       age: form.age || null,
       lessons: form.lessons ? Number(form.lessons) : null,
+      image_url: form.image_url || null,
       price: Number(form.price || 0),
       currency: form.currency || "UAH",
       billing_period: form.billing_period || "one_time",
@@ -230,6 +260,42 @@ function ProductDialog({
         </DialogHeader>
 
         <div className="space-y-4 py-2">
+          {/* Cover image */}
+          <div>
+            <Label>Зображення курсу</Label>
+            <div className="mt-1.5 flex gap-3">
+              <div className="w-24 h-24 shrink-0 rounded-xl border border-border bg-muted flex items-center justify-center overflow-hidden">
+                {cover ? (
+                  <img src={cover} alt="" className="w-full h-full object-contain" />
+                ) : (
+                  <ImageIcon className="w-6 h-6 text-muted-foreground" />
+                )}
+              </div>
+              <div className="flex-1 flex flex-col justify-center gap-2">
+                <input ref={fileRef} type="file" accept="image/*" hidden onChange={onFile} />
+                <Button variant="outline" onClick={() => fileRef.current?.click()} disabled={uploading}>
+                  {uploading ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <Upload className="w-4 h-4 mr-1" />}
+                  {cover ? "Замінити зображення" : "Завантажити зображення"}
+                </Button>
+                {cover && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-destructive hover:text-destructive justify-start"
+                    onClick={() => set("image_url", null as any)}
+                  >
+                    <Trash2 className="w-3.5 h-3.5 mr-1" /> Прибрати
+                  </Button>
+                )}
+                {!cover && (
+                  <p className="text-xs text-muted-foreground">
+                    Якщо не завантажити — на сайті буде стандартна обкладинка курсу.
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+
           <div className="grid grid-cols-3 gap-3">
             <div className="col-span-1">
               <Label>Емодзі</Label>
@@ -381,7 +447,7 @@ function ProductDialog({
             <Button variant="outline" onClick={onClose}>
               Скасувати
             </Button>
-            <Button onClick={save} disabled={saving}>
+            <Button onClick={save} disabled={saving || uploading}>
               {saving && <Loader2 className="w-4 h-4 mr-1 animate-spin" />}
               Зберегти
             </Button>
